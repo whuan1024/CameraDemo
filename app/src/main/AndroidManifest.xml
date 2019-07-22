@@ -3,6 +3,7 @@
           package="com.example.tommy.camerademo">
 
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
+    <uses-permission android:name="android.permission.RECORD_AUDIO"/>
     <uses-permission android:name="android.permission.CAMERA"/>
 
     <uses-feature android:name="android.hardware.camera"/>
@@ -22,7 +23,13 @@
                 <category android:name="android.intent.category.LAUNCHER"/>
             </intent-filter>
         </activity>
-        <activity android:name=".TakePhotoActivity">
+        <activity
+            android:name=".TakePhotoActivity"
+            android:screenOrientation="portrait">
+        </activity>
+        <activity
+            android:name=".TakeVideoActivity"
+            android:screenOrientation="portrait">
         </activity>
     </application>
 
