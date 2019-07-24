@@ -58,6 +58,24 @@ public class MainActivity extends AppCompatActivity {
                 startActivity(intent);
             }
         });
+
+        findViewById(R.id.button5).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(MainActivity.this, CameraKitActivity.class);
+                intent.putExtra(Utils.MEDIA_INX, Media.PHOTO.getIndex());
+                startActivity(intent);
+            }
+        });
+
+        findViewById(R.id.button6).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(MainActivity.this, CameraKitActivity.class);
+                intent.putExtra(Utils.MEDIA_INX, Media.VIDEO.getIndex());
+                startActivity(intent);
+            }
+        });
     }
 
     @Override

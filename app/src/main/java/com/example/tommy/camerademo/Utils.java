@@ -7,6 +7,8 @@ import android.view.View;
 import android.view.WindowManager;
 
 import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
@@ -14,6 +16,7 @@ public class Utils {
 
     public static final String TAG = "CameraDemo";
 
+    public static final String MEDIA_INX = "media_inx";
     private static final String FILE_DIR = "MyCamera";
 
     /**
@@ -61,5 +64,25 @@ public class Utils {
 
     public static boolean hasSdcard() {
         return Environment.getExternalStorageState().equals(Environment.MEDIA_MOUNTED);
+    }
+
+    public static void savePhoto(Context context, byte[] data) {
+        FileOutputStream fos = null;
+        String filePath = getFilePath(context, Media.PHOTO);
+        try {
+            fos = new FileOutputStream(filePath);
+            fos.write(data);
+            fos.flush();
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            try {
+                if (fos != null) {
+                    fos.close();
+                }
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
     }
 }

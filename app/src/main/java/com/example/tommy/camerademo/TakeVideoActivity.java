@@ -20,7 +20,7 @@ import static com.example.tommy.camerademo.Utils.TAG;
 
 /**
  * 参考 https://my.oschina.net/xiaoaimiao/blog/1574717
- * https://github.com/Yaphetwyf/Camera
+ *     https://github.com/Yaphetwyf/Camera
  */
 public class TakeVideoActivity extends AppCompatActivity {
 
@@ -33,7 +33,7 @@ public class TakeVideoActivity extends AppCompatActivity {
     private Button mTakeVideo;
 
     /** 标记当前是否正在录制 */
-    private boolean isRunning = false;
+    private boolean mIsRecording = false;
 
     /** The settings used for video recording */
     private CamcorderProfile mCamcorderProfile;
@@ -62,19 +62,26 @@ public class TakeVideoActivity extends AppCompatActivity {
     }
 
     private void takeVideo() {
-        if (isRunning) {
+        if (mIsRecording) {
             Log.i(TAG, "Stop recording.");
             stopRecording();
-            mTimer.setBase(SystemClock.elapsedRealtime());
-            mTimer.stop();
-            mTakeVideo.setBackgroundResource(R.drawable.btn_shutter_video_default);
+            updateUI(false);
         } else {
             if (startRecording()) {
                 Log.i(TAG, "Start recording.");
-                mTimer.setBase(SystemClock.elapsedRealtime());
-                mTimer.start();
-                mTakeVideo.setBackgroundResource(R.drawable.btn_shutter_video_recording);
+                updateUI(true);
             }
+        }
+    }
+
+    private void updateUI(boolean isRecording) {
+        mTimer.setBase(SystemClock.elapsedRealtime());
+        if (isRecording) {
+            mTimer.start();
+            mTakeVideo.setBackgroundResource(R.drawable.btn_shutter_video_recording);
+        } else {
+            mTimer.stop();
+            mTakeVideo.setBackgroundResource(R.drawable.btn_shutter_video_default);
         }
     }
 
@@ -147,12 +154,12 @@ public class TakeVideoActivity extends AppCompatActivity {
     private boolean startRecording() {
         if (prepareMediaRecorder()) {
             mMediaRecorder.start();
-            isRunning = true;
+            mIsRecording = true;
         } else {
             releaseMediaRecorder();
-            isRunning = false;
+            mIsRecording = false;
         }
-        return isRunning;
+        return mIsRecording;
     }
 
     private void stopRecording() {
@@ -160,7 +167,7 @@ public class TakeVideoActivity extends AppCompatActivity {
             mMediaRecorder.stop();
         }
         releaseMediaRecorder();
-        isRunning = false;
+        mIsRecording = false;
     }
 
     private class SurfaceCallBack implements SurfaceHolder.Callback {
@@ -186,6 +193,11 @@ public class TakeVideoActivity extends AppCompatActivity {
         @Override
         public void surfaceDestroyed(SurfaceHolder holder) {
             Log.i(TAG, "------surfaceDestroyed------");
+            if (mIsRecording) {
+                Log.i(TAG, "Stop recording after surface destroyed.");
+                stopRecording();
+                updateUI(false);
+            }
             releaseCamera();
             releaseMediaRecorder();
         }

@@ -10,7 +10,6 @@ import android.view.SurfaceHolder;
 import android.view.SurfaceView;
 import android.view.View;
 
-import java.io.FileOutputStream;
 import java.io.IOException;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -190,7 +189,7 @@ public class TakePhotoActivity extends AppCompatActivity {
                         //拍照回调接口
                         @Override
                         public void onPictureTaken(byte[] data, Camera camera) {
-                            savePhoto(data);
+                            Utils.savePhoto(TakePhotoActivity.this, data);
                             //停止预览
                             mCamera.stopPreview();
                             //重启预览
@@ -217,30 +216,6 @@ public class TakePhotoActivity extends AppCompatActivity {
                 e.printStackTrace();
             }
             player.start();
-        }
-    }
-
-    /**
-     * 将拍照保存下来
-     */
-    private void savePhoto(byte[] data) {
-        FileOutputStream fos = null;
-        //保存路径+图片名字
-        String imagePath = Utils.getFilePath(this, Media.PHOTO);
-        try {
-            fos = new FileOutputStream(imagePath);
-            fos.write(data);
-            fos.flush();
-        } catch (Exception e) {
-            e.printStackTrace();
-        } finally {
-            try {
-                if (fos != null) {
-                    fos.close();
-                }
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
         }
     }
 
