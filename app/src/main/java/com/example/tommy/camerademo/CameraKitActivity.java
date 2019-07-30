@@ -1,5 +1,6 @@
 package com.example.tommy.camerademo;
 
+import android.media.MediaActionSound;
 import android.os.Bundle;
 import android.os.SystemClock;
 import android.util.Log;
@@ -89,6 +90,7 @@ public class CameraKitActivity extends AppCompatActivity implements View.OnClick
     }
 
     private void takePhoto() {
+        new MediaActionSound().play(MediaActionSound.SHUTTER_CLICK);
         mCameraView.captureImage(new CameraKitEventCallback<CameraKitImage>() {
             @Override
             public void callback(CameraKitImage cameraKitImage) {
